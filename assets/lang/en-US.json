@@ -1,0 +1,33 @@
+{
+    "login": {
+        "username": "Username",
+        "password": "Password",
+        "signup": "Sign up",
+        "forgotText": "Forgotten Password?",
+        "login": "Login",
+        "dontAccount": "Don't have an Account?",
+        "incorrect": "Incorrect Username or Password.",
+        "signin": "Sign in"
+    },
+    "signup": {
+        "username": "Username",
+        "password": "Password",
+        "repassword": "Re Password",
+        "signup": "Sign up"
+    },
+    "profile": {
+        "profile": "Profile Page",
+        "information": "User Information",
+        "location": "Location",
+        "email": "Email",
+        "phone": "Phone",
+        "about": "About Me"
+    },
+    "questionnaire": {
+        "questionnaire": "Welcome Questionnaire",
+        "next": "Next",
+        "cancel": "Cancel",
+        "phone": "Phone Number",
+        "city": "City"
+    }
+}
