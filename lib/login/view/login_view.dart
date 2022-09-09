@@ -7,6 +7,7 @@ import '../../core/Init/auth/auth_state.dart';
 import '../../core/Init/cache/cache_manager.dart';
 import '../../core/Init/lang/locale_keys.g.dart';
 import '../../core/utilities/supabase_helper.dart';
+import '../../core/widget/appbar_widget.dart';
 import '../../core/widget/icon/circular_button.dart';
 import '../../core/widget/icon/social_icon.dart';
 import '../../core/widget/input/normal_input_field.dart';
@@ -77,6 +78,7 @@ class _LoginViewState extends AuthState<LoginView>
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return Scaffold(
+      appBar: buildAppBar(context),
       body: SingleChildScrollView(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,

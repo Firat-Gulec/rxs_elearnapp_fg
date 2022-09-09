@@ -33,7 +33,8 @@ dependencies:
   shared_preferences: ^2.0.15
   easy_localization: ^3.0.1
   supabase_flutter: ^0.3.3
-  
+  image_picker: ^0.8.5+3
+  path_provider: ^2.0.11
   casbin: ^0.1.0
   flutter:
     sdk: flutter

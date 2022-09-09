@@ -19,18 +19,29 @@ class ThemeProvider extends ChangeNotifier {
   }
 }
 
+
 class MyThemes {
+  static final primary = Colors.blue;
+  static final primaryColor = Colors.blue.shade300;
+
   static final darkTheme = ThemeData(
     scaffoldBackgroundColor: Colors.grey.shade900,
-    primaryColor: Colors.black,
-    colorScheme: ColorScheme.dark(),
-    iconTheme: IconThemeData(color: Colors.purple.shade200, opacity: 0.8),
+    primaryColorDark: primaryColor,
+    accentColor: Colors.blue,
+    colorScheme: ColorScheme.dark(primary: primary),
+    dividerColor: Colors.white,
+    appBarTheme: AppBarTheme(
+        foregroundColor: Colors.white //here you can give the text color
+        ),
   );
 
   static final lightTheme = ThemeData(
     scaffoldBackgroundColor: Colors.white,
-    primaryColor: Colors.white,
-    colorScheme: ColorScheme.light(),
-    iconTheme: IconThemeData(color: Colors.red, opacity: 0.8),
+    primaryColor: primaryColor,
+    colorScheme: ColorScheme.light(primary: primary),
+    dividerColor: Colors.black,
+    appBarTheme: AppBarTheme(
+        foregroundColor: Colors.black 
+        ),
   );
 }
