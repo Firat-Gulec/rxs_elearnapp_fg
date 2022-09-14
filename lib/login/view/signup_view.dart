@@ -1,5 +1,6 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:rxs_elearnapp_fg/profile/view/profile_view.dart';
 
 import 'package:supabase_flutter/supabase_flutter.dart' hide Provider;
 
@@ -13,7 +14,6 @@ import '../../core/widget/icon/circular_button.dart';
 import '../../core/widget/input/normal_input_field.dart';
 import '../../core/widget/input/password_input_field.dart';
 import '../../core/widget/padding/custom_padding.dart';
-import 'account_page.dart';
 
 class RegisterForm extends StatefulWidget {
   const RegisterForm({Key? key}) : super(key: key);
@@ -57,7 +57,7 @@ class _RegisterFormState extends AuthState<RegisterForm> {
 
       Navigator.push(context, MaterialPageRoute(
         builder: (context) {
-          return const AccountPage();
+          return const ProfileView();
         },
       ));
     }

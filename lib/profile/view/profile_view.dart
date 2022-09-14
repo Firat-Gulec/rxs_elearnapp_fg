@@ -137,9 +137,12 @@ class _ProfileViewState extends AuthRequiredState<ProfileView>
                   const SizedBox(
                     height: 10,
                   ),
-                  const Text(
-                    'veli.duman@rixos.com',
+                  Text(
+                    _usernameController.text,
                     style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                  ),
+                  const SizedBox(
+                    height: 24,
                   ),
                   NormalInputField(
                       data: Theme.of(context),
@@ -153,18 +156,16 @@ class _ProfileViewState extends AuthRequiredState<ProfileView>
                       data: Theme.of(context),
                       controller: _websiteController,
                       onChanged: (text) {},
-                      title: LocaleKeys.login_username.tr()),
+                      title: 'User Role'),
                   const SizedBox(height: 24),
-                     ElevatedButton(
-              onPressed: _updateProfile,
-              child: Text(_loading ? 'Saving...' : 'Update')),
-                 
-                  
+                  ElevatedButton(
+                      onPressed: _updateProfile,
+                      child: Text(_loading ? 'Saving...' : 'Update')),
                   const SizedBox(
                     height: 10,
                   ),
-                 ElevatedButton(onPressed: _signOut, child: const Text('Sign Out')),
-                  
+                  ElevatedButton(
+                      onPressed: _signOut, child: const Text('Sign Out')),
                   const SizedBox(
                     height: 10,
                   ),
