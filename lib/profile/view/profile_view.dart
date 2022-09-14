@@ -32,7 +32,7 @@ class _ProfileViewState extends AuthRequiredState<ProfileView>
   final _usernameController = TextEditingController();
   final _websiteController = TextEditingController();
   var _loading = false;
-  late String imagePath= 'test';
+  late String imagePath = 'test';
 
   /// Called once a user id is received within `onAuthenticated()`
   Future<void> _getProfile(String userId) async {
@@ -40,8 +40,8 @@ class _ProfileViewState extends AuthRequiredState<ProfileView>
       _loading = true;
     });
 
-    final storageResponse = await supabase.storage.from('avatars').getPublicUrl('avatar1.png');
-
+    final storageResponse =
+        await supabase.storage.from('avatars').getPublicUrl('avatar1.png');
     final storageError = storageResponse.error;
     if (storageError != null) {
       context.showErrorSnackBar(message: storageError.message);
@@ -51,9 +51,7 @@ class _ProfileViewState extends AuthRequiredState<ProfileView>
       print(storageResponse.data.toString());
       print('object');
       imagePath = storageData.toString();
-    
     }
-
 
     final response = await supabase
         .from('profiles')
@@ -61,7 +59,7 @@ class _ProfileViewState extends AuthRequiredState<ProfileView>
         .eq('id', userId)
         .single()
         .execute();
-        
+
     final error = response.error;
     if (error != null && response.status != 406) {
       context.showErrorSnackBar(message: error.message);
@@ -70,10 +68,13 @@ class _ProfileViewState extends AuthRequiredState<ProfileView>
     if (data != null) {
       _usernameController.text = (data['username'] ?? '') as String;
       _websiteController.text = (data['user_role'] ?? '') as String;
+      imagePath = (data['avatar_url'] ?? '') as String;
     }
     setState(() {
       _loading = false;
-      imagePath = storageData.toString();
+      if (imagePath == '') {
+        imagePath = storageData.toString();
+      }
     });
   }
 
@@ -91,17 +92,15 @@ class _ProfileViewState extends AuthRequiredState<ProfileView>
       'id': user!.id,
       'username': userName,
       'user_role': website,
+      'avatar_url': imagePath,
       'updated_at': DateTime.now().toIso8601String(),
     };
 
- /*   final avatarFile = File(imagePath);
+    final avatarFile = File(imagePath);
 
-final responseAvatar = await supabase.storage
-  .from('avatars')
-  .upload('public/avatar1.png', avatarFile, fileOptions: FileOptions(
-    cacheControl: '3600',
-    upsert: false
-  ));*/
+    final responseAvatar = await supabase.storage.from('avatars').upload(
+        '${user.id}/avatar1.png', avatarFile,
+        fileOptions: FileOptions(cacheControl: '3600', upsert: false));
 
     final response = await supabase.from('profiles').upsert(updates).execute();
     final error = response.error;
@@ -160,7 +159,9 @@ final responseAvatar = await supabase.storage
                     onClicked: () async {
                       final image = await ImagePicker()
                           .pickImage(source: ImageSource.gallery);
-                      if (image == null) return;
+                      if (image != null) {
+                        imagePath = image.path;
+                      }
 //
                     },
                   ),
