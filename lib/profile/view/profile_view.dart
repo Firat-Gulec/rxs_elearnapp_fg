@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
@@ -7,7 +9,7 @@ import '../../core/Init/lang/locale_keys.g.dart';
 import '../../core/Init/provider/theme_provider.dart';
 import '../../core/constants.dart';
 import '../../core/widget/appbar_widget.dart';
-import '../../core/widget/button_widget.dart';
+
 import '../../core/widget/input/normal_input_field.dart';
 import '../../core/widget/profile_widget.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
@@ -30,18 +32,36 @@ class _ProfileViewState extends AuthRequiredState<ProfileView>
   final _usernameController = TextEditingController();
   final _websiteController = TextEditingController();
   var _loading = false;
+  late String imagePath= 'test';
 
   /// Called once a user id is received within `onAuthenticated()`
   Future<void> _getProfile(String userId) async {
     setState(() {
       _loading = true;
     });
+
+    final storageResponse = await supabase.storage.from('avatars').getPublicUrl('avatar1.png');
+
+    final storageError = storageResponse.error;
+    if (storageError != null) {
+      context.showErrorSnackBar(message: storageError.message);
+    }
+    final storageData = storageResponse.data;
+    if (storageData != null) {
+      print(storageResponse.data.toString());
+      print('object');
+      imagePath = storageData.toString();
+    
+    }
+
+
     final response = await supabase
         .from('profiles')
         .select()
         .eq('id', userId)
         .single()
         .execute();
+        
     final error = response.error;
     if (error != null && response.status != 406) {
       context.showErrorSnackBar(message: error.message);
@@ -53,6 +73,7 @@ class _ProfileViewState extends AuthRequiredState<ProfileView>
     }
     setState(() {
       _loading = false;
+      imagePath = storageData.toString();
     });
   }
 
@@ -72,6 +93,15 @@ class _ProfileViewState extends AuthRequiredState<ProfileView>
       'user_role': website,
       'updated_at': DateTime.now().toIso8601String(),
     };
+
+ /*   final avatarFile = File(imagePath);
+
+final responseAvatar = await supabase.storage
+  .from('avatars')
+  .upload('public/avatar1.png', avatarFile, fileOptions: FileOptions(
+    cacheControl: '3600',
+    upsert: false
+  ));*/
 
     final response = await supabase.from('profiles').upsert(updates).execute();
     final error = response.error;
@@ -125,7 +155,7 @@ class _ProfileViewState extends AuthRequiredState<ProfileView>
               child: Column(
                 children: [
                   ProfileWidget(
-                    imagePath: 'imagePath',
+                    imagePath: imagePath,
                     isEdit: true,
                     onClicked: () async {
                       final image = await ImagePicker()
