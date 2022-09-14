@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 
-import '../../../login/view/account_page.dart';
+
 import '../../../login/view/login_view.dart';
 import '../../../login/view/signup_view.dart';
 import '../../../login/view/splash_screen.dart';
 import '../../../login/view/welcome_view.dart';
+import '../../../profile/view/profile_view.dart';
 import 'navigation_constants.dart';
 
 
@@ -28,7 +29,7 @@ class NavigationRoute {
 
       case NavigationConstants.PROFILE_VIEW:
         return normalNavigate(
-            const AccountPage(), NavigationConstants.PROFILE_VIEW);
+            const ProfileView(), NavigationConstants.PROFILE_VIEW);
 
             case NavigationConstants.PROFILE_SIGNUP:
         return normalNavigate(

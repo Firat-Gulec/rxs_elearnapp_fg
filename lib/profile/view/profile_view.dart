@@ -1,16 +1,18 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 import '../../core/Init/cache/cache_manager.dart';
+import '../../core/Init/lang/locale_keys.g.dart';
 import '../../core/Init/provider/theme_provider.dart';
 import '../../core/constants.dart';
 import '../../core/widget/appbar_widget.dart';
 import '../../core/widget/button_widget.dart';
+import '../../core/widget/input/normal_input_field.dart';
 import '../../core/widget/profile_widget.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import '../../core/widget/textfield_widget.dart';
 import 'package:rxs_elearnapp_fg/core/Init/auth/auth_require_state.dart';
-
 
 class ProfileView extends StatefulWidget {
   const ProfileView({super.key});
@@ -19,12 +21,13 @@ class ProfileView extends StatefulWidget {
   State<ProfileView> createState() => _ProfileViewState();
 }
 
-class _ProfileViewState extends AuthRequiredState<ProfileView> with CacheManager {
+class _ProfileViewState extends AuthRequiredState<ProfileView>
+    with CacheManager {
   Future<void> _changeTheme() async {
     setState(() {});
   }
 
-   final _usernameController = TextEditingController();
+  final _usernameController = TextEditingController();
   final _websiteController = TextEditingController();
   var _loading = false;
 
@@ -59,9 +62,6 @@ class _ProfileViewState extends AuthRequiredState<ProfileView> with CacheManager
       _loading = true;
     });
 
-  
-  
-
     final userName = _usernameController.text;
     final website = _websiteController.text;
     final user = supabase.auth.currentUser;
@@ -72,8 +72,10 @@ class _ProfileViewState extends AuthRequiredState<ProfileView> with CacheManager
       'user_role': website,
       'updated_at': DateTime.now().toIso8601String(),
     };
+
     final response = await supabase.from('profiles').upsert(updates).execute();
     final error = response.error;
+    print(error);
     if (error != null) {
       context.showErrorSnackBar(message: error.message);
     } else {
@@ -110,7 +112,7 @@ class _ProfileViewState extends AuthRequiredState<ProfileView> with CacheManager
 
   @override
   Widget build(BuildContext context) {
-        Size size = MediaQuery.of(context).size;
+    Size size = MediaQuery.of(context).size;
     return Scaffold(
       appBar: buildAppBar(context),
       body: SingleChildScrollView(
@@ -139,30 +141,30 @@ class _ProfileViewState extends AuthRequiredState<ProfileView> with CacheManager
                     'veli.duman@rixos.com',
                     style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                   ),
-                  TextFieldWidget(
-                      label: 'User Name',
-                      text: 'Veli Duman',
-                      onChanged: ((value) {})),
+                  NormalInputField(
+                      data: Theme.of(context),
+                      controller: _usernameController,
+                      onChanged: (text) {},
+                      title: LocaleKeys.login_username.tr()),
                   const SizedBox(
                     height: 10,
                   ),
-                  TextFieldWidget(
-                      label: 'About',
-                      text: 'user.about',
-                      maxLines: 5,
-                      onChanged: ((value) {})),
+                  NormalInputField(
+                      data: Theme.of(context),
+                      controller: _websiteController,
+                      onChanged: (text) {},
+                      title: LocaleKeys.login_username.tr()),
                   const SizedBox(height: 24),
-                  ButtonWidget(
-                    text: 'Save',
-                    onClicked: (() {}),
-                  ),
+                     ElevatedButton(
+              onPressed: _updateProfile,
+              child: Text(_loading ? 'Saving...' : 'Update')),
+                 
+                  
                   const SizedBox(
                     height: 10,
                   ),
-                  ButtonWidget(
-                    text: 'Sign Out',
-                    onClicked: (() {}),
-                  ),
+                 ElevatedButton(onPressed: _signOut, child: const Text('Sign Out')),
+                  
                   const SizedBox(
                     height: 10,
                   ),
