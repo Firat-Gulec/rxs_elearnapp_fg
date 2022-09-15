@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:easy_localization/easy_localization.dart';
@@ -32,7 +33,7 @@ class _ProfileViewState extends AuthRequiredState<ProfileView>
   final _usernameController = TextEditingController();
   final _websiteController = TextEditingController();
   var _loading = false;
-  late String imagePath = 'test';
+  late String imagePath = '';
 
   /// Called once a user id is received within `onAuthenticated()`
   Future<void> _getProfile(String userId) async {
@@ -68,12 +69,13 @@ class _ProfileViewState extends AuthRequiredState<ProfileView>
     if (data != null) {
       _usernameController.text = (data['username'] ?? '') as String;
       _websiteController.text = (data['user_role'] ?? '') as String;
-      imagePath = (data['avatar_url'] ?? '') as String;
+     // imagePath = (data['avatar_url'] ?? '') as String;
     }
     setState(() {
       _loading = false;
       if (imagePath == '') {
         imagePath = storageData.toString();
+   
       }
     });
   }
@@ -92,16 +94,16 @@ class _ProfileViewState extends AuthRequiredState<ProfileView>
       'id': user!.id,
       'username': userName,
       'user_role': website,
-      'avatar_url': imagePath,
+      //'avatar_url': imagePath,
       'updated_at': DateTime.now().toIso8601String(),
     };
-
+/*
     final avatarFile = File(imagePath);
 
     final responseAvatar = await supabase.storage.from('avatars').upload(
         '${user.id}/avatar1.png', avatarFile,
         fileOptions: FileOptions(cacheControl: '3600', upsert: false));
-
+*/
     final response = await supabase.from('profiles').upsert(updates).execute();
     final error = response.error;
     print(error);
@@ -136,6 +138,7 @@ class _ProfileViewState extends AuthRequiredState<ProfileView>
   void dispose() {
     _usernameController.dispose();
     _websiteController.dispose();
+    
     super.dispose();
   }
 
@@ -153,18 +156,19 @@ class _ProfileViewState extends AuthRequiredState<ProfileView>
               padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
               child: Column(
                 children: [
-                  ProfileWidget(
+                 ProfileWidget(
                     imagePath: imagePath,
                     isEdit: true,
                     onClicked: () async {
-                      final image = await ImagePicker()
+                     final image = await ImagePicker()
                           .pickImage(source: ImageSource.gallery);
-                      if (image != null) {
+                          if (image == null) return;  /*  
+                   if (image != null) {
                         imagePath = image.path;
                       }
-//
+*/
                     },
-                  ),
+                  ), 
                   const SizedBox(
                     height: 10,
                   ),

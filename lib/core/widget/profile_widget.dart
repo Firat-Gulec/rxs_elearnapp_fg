@@ -1,6 +1,9 @@
+import 'dart:convert';
 import 'dart:io';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 class ProfileWidget extends StatelessWidget {
   final String imagePath;
@@ -36,6 +39,9 @@ class ProfileWidget extends StatelessWidget {
     final image = imagePath.contains('https://')
         ? NetworkImage(imagePath)
         : FileImage(File(imagePath));
+
+      
+        
 
     return ClipOval(
       child: Material(
