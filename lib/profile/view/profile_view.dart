@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:image_picker_widget/image_picker_widget.dart';
 import 'package:provider/provider.dart';
 import '../../core/Init/cache/cache_manager.dart';
 import '../../core/Init/lang/locale_keys.g.dart';
@@ -69,13 +70,12 @@ class _ProfileViewState extends AuthRequiredState<ProfileView>
     if (data != null) {
       _usernameController.text = (data['username'] ?? '') as String;
       _websiteController.text = (data['user_role'] ?? '') as String;
-     // imagePath = (data['avatar_url'] ?? '') as String;
+      // imagePath = (data['avatar_url'] ?? '') as String;
     }
     setState(() {
       _loading = false;
       if (imagePath == '') {
         imagePath = storageData.toString();
-   
       }
     });
   }
@@ -138,7 +138,7 @@ class _ProfileViewState extends AuthRequiredState<ProfileView>
   void dispose() {
     _usernameController.dispose();
     _websiteController.dispose();
-    
+
     super.dispose();
   }
 
@@ -156,19 +156,16 @@ class _ProfileViewState extends AuthRequiredState<ProfileView>
               padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
               child: Column(
                 children: [
-                 ProfileWidget(
-                    imagePath: imagePath,
-                    isEdit: true,
-                    onClicked: () async {
-                     final image = await ImagePicker()
-                          .pickImage(source: ImageSource.gallery);
-                          if (image == null) return;  /*  
-                   if (image != null) {
-                        imagePath = image.path;
-                      }
-*/
-                    },
-                  ), 
+                  ImagePickerWidget(
+                      diameter: 180,
+                      initialImage: imagePath,
+                      shape: ImagePickerWidgetShape.circle,
+                      isEditable: true,
+                      shouldCrop: true,
+                      imagePickerOptions: ImagePickerOptions(imageQuality: 65),
+                      onChange: (File file) {
+                        print("I changed the file to: ${file.path}");
+                      }),
                   const SizedBox(
                     height: 10,
                   ),
