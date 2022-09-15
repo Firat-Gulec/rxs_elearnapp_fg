@@ -5,7 +5,6 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:image_picker_widget/image_picker_widget.dart';
-import 'package:provider/provider.dart';
 import '../../core/Init/cache/cache_manager.dart';
 import '../../core/Init/lang/locale_keys.g.dart';
 import '../../core/Init/provider/theme_provider.dart';
@@ -34,7 +33,8 @@ class _ProfileViewState extends AuthRequiredState<ProfileView>
   final _usernameController = TextEditingController();
   final _websiteController = TextEditingController();
   var _loading = false;
-  late String imagePath = '';
+  late String imagePath =
+      'https://sgulfrkzsmagewgaqqhe.supabase.co/storage/v1/object/public/avatars/avatar1.png';
 
   /// Called once a user id is received within `onAuthenticated()`
   Future<void> _getProfile(String userId) async {
@@ -70,12 +70,13 @@ class _ProfileViewState extends AuthRequiredState<ProfileView>
     if (data != null) {
       _usernameController.text = (data['username'] ?? '') as String;
       _websiteController.text = (data['user_role'] ?? '') as String;
-      // imagePath = (data['avatar_url'] ?? '') as String;
+      imagePath = (data['avatar_url'] ?? '') as String;
     }
     setState(() {
       _loading = false;
       if (imagePath == '') {
         imagePath = storageData.toString();
+        //_imageFile = ImagePicker.pickImage(source: imagePath)
       }
     });
   }
@@ -86,24 +87,26 @@ class _ProfileViewState extends AuthRequiredState<ProfileView>
       _loading = true;
     });
 
+ final avatarFile = File(imagePath);
     final userName = _usernameController.text;
     final website = _websiteController.text;
     final user = supabase.auth.currentUser;
+
+    final responseAvatar = await supabase.storage.from('avatars').upload(
+        '${user?.id}/avatar1.png', avatarFile,
+        fileOptions: FileOptions(cacheControl: '3600', upsert: false));
+
+
+
     print(user);
     final updates = {
       'id': user!.id,
       'username': userName,
       'user_role': website,
-      //'avatar_url': imagePath,
+      'avatar_url': imagePath,
       'updated_at': DateTime.now().toIso8601String(),
     };
-/*
-    final avatarFile = File(imagePath);
 
-    final responseAvatar = await supabase.storage.from('avatars').upload(
-        '${user.id}/avatar1.png', avatarFile,
-        fileOptions: FileOptions(cacheControl: '3600', upsert: false));
-*/
     final response = await supabase.from('profiles').upsert(updates).execute();
     final error = response.error;
     print(error);
@@ -156,16 +159,33 @@ class _ProfileViewState extends AuthRequiredState<ProfileView>
               padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
               child: Column(
                 children: [
-                  ImagePickerWidget(
+                  Center(
+                      child: ImagePickerWidget(
+                    diameter: 180,
+                    initialImage: imagePath,
+                    shape: ImagePickerWidgetShape.circle,
+                    isEditable: true,
+                    shouldCrop: true,
+                    imagePickerOptions: ImagePickerOptions(imageQuality: 65),
+                    onChange: (file) {
+                      print("I changed the file to: ${file.path}");
+                      setState(() {
+                        imagePath = file.path;
+                      });
+                    },
+                  )),
+                  /* ImagePickerWidget(
                       diameter: 180,
-                      initialImage: imagePath,
+                      initialImage:
+                          "https://strattonapps.com/wp-content/uploads/2020/02/flutter-logo-5086DD11C5-seeklogo.com_.png",
                       shape: ImagePickerWidgetShape.circle,
                       isEditable: true,
                       shouldCrop: true,
                       imagePickerOptions: ImagePickerOptions(imageQuality: 65),
                       onChange: (File file) {
                         print("I changed the file to: ${file.path}");
-                      }),
+                        imagePath = file.path;
+                      }),*/
                   const SizedBox(
                     height: 10,
                   ),
