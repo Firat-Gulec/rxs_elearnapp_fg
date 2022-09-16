@@ -1,5 +1,5 @@
-import 'dart:convert';
-import 'dart:io';
+
+
 
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
@@ -33,8 +33,7 @@ class _ProfileViewState extends AuthRequiredState<ProfileView>
   final _usernameController = TextEditingController();
   final _websiteController = TextEditingController();
   var _loading = false;
-  late String imagePath =
-      'https://sgulfrkzsmagewgaqqhe.supabase.co/storage/v1/object/public/avatars/avatar1.png';
+  late String imagePath ='http://upload.art.ifeng.com/2017/0425/1493105660290.jpg';
 
   /// Called once a user id is received within `onAuthenticated()`
   Future<void> _getProfile(String userId) async {
@@ -52,7 +51,7 @@ class _ProfileViewState extends AuthRequiredState<ProfileView>
     if (storageData != null) {
       print(storageResponse.data.toString());
       print('object');
-      imagePath = storageData.toString();
+    //  imagePath = storageResponse.data.toString();
     }
 
     final response = await supabase
@@ -70,12 +69,15 @@ class _ProfileViewState extends AuthRequiredState<ProfileView>
     if (data != null) {
       _usernameController.text = (data['username'] ?? '') as String;
       _websiteController.text = (data['user_role'] ?? '') as String;
-      imagePath = (data['avatar_url'] ?? '') as String;
+      //imagePath = (data['avatar_url'] ?? '') as String;
     }
+    
     setState(() {
       _loading = false;
-      if (imagePath == '') {
+      if (imagePath == 'http://upload.art.ifeng.com/2017/0425/1493105660290.jpg') {
         imagePath = storageData.toString();
+        print(imagePath);
+        print('atama eğer');
         //_imageFile = ImagePicker.pickImage(source: imagePath)
       }
     });
@@ -86,24 +88,26 @@ class _ProfileViewState extends AuthRequiredState<ProfileView>
     setState(() {
       _loading = true;
     });
+//print(imagePath);
 
- final avatarFile = File(imagePath);
+ final avatarFile = imagePath;
+
     final userName = _usernameController.text;
     final website = _websiteController.text;
     final user = supabase.auth.currentUser;
 
-    final responseAvatar = await supabase.storage.from('avatars').upload(
+   /* final responseAvatar = await supabase.storage.from('avatars').upload(
         '${user?.id}/avatar1.png', avatarFile,
         fileOptions: FileOptions(cacheControl: '3600', upsert: false));
+*/
 
 
-
-    print(user);
+    //print(user);
     final updates = {
       'id': user!.id,
       'username': userName,
       'user_role': website,
-      'avatar_url': imagePath,
+      //'avatar_url': imagePath,
       'updated_at': DateTime.now().toIso8601String(),
     };
 
@@ -152,7 +156,7 @@ class _ProfileViewState extends AuthRequiredState<ProfileView>
       appBar: buildAppBar(context),
       body: SingleChildScrollView(
         child: Stack(
-          children: [
+          children: <Widget>[
             Container(
               alignment: Alignment.center,
               margin: const EdgeInsets.fromLTRB(25, 10, 25, 10),
@@ -170,7 +174,7 @@ class _ProfileViewState extends AuthRequiredState<ProfileView>
                     onChange: (file) {
                       print("I changed the file to: ${file.path}");
                       setState(() {
-                        imagePath = file.path;
+                        
                       });
                     },
                   )),
@@ -218,6 +222,10 @@ class _ProfileViewState extends AuthRequiredState<ProfileView>
                   ),
                   ElevatedButton(
                       onPressed: _signOut, child: const Text('Sign Out')),
+                       ElevatedButton(
+                      onPressed: () {
+                        print(imagePath);
+                      }, child: const Text('Change')),
                   const SizedBox(
                     height: 10,
                   ),
