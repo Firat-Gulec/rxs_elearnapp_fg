@@ -1,6 +1,8 @@
 
 
 
+import 'dart:io';
+
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
@@ -26,6 +28,10 @@ class ProfileView extends StatefulWidget {
 
 class _ProfileViewState extends AuthRequiredState<ProfileView>
     with CacheManager {
+    
+    
+ 
+
   Future<void> _changeTheme() async {
     setState(() {});
   }
@@ -34,6 +40,11 @@ class _ProfileViewState extends AuthRequiredState<ProfileView>
   final _websiteController = TextEditingController();
   var _loading = false;
   late String imagePath ='http://upload.art.ifeng.com/2017/0425/1493105660290.jpg';
+late XFile _profileImage;
+
+
+  late File _pickedImage;
+  late String _imagepath;
 
   /// Called once a user id is received within `onAuthenticated()`
   Future<void> _getProfile(String userId) async {
@@ -72,15 +83,14 @@ class _ProfileViewState extends AuthRequiredState<ProfileView>
       //imagePath = (data['avatar_url'] ?? '') as String;
     }
     
-    setState(() {
+   // setState(()  {
       _loading = false;
-      if (imagePath == 'http://upload.art.ifeng.com/2017/0425/1493105660290.jpg') {
-        imagePath = storageData.toString();
+          imagePath = storageData.toString();
         print(imagePath);
         print('atama eğer');
         //_imageFile = ImagePicker.pickImage(source: imagePath)
-      }
-    });
+  
+  //  });
   }
 
   /// Called when user taps `Update` button
@@ -156,13 +166,15 @@ class _ProfileViewState extends AuthRequiredState<ProfileView>
       appBar: buildAppBar(context),
       body: SingleChildScrollView(
         child: Stack(
-          children: <Widget>[
+          children: [
             Container(
               alignment: Alignment.center,
               margin: const EdgeInsets.fromLTRB(25, 10, 25, 10),
               padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
               child: Column(
-                children: [
+                children: [ 
+
+                  
                   Center(
                       child: ImagePickerWidget(
                     diameter: 180,
@@ -174,22 +186,13 @@ class _ProfileViewState extends AuthRequiredState<ProfileView>
                     onChange: (file) {
                       print("I changed the file to: ${file.path}");
                       setState(() {
-                        
+                       // imagePath = file.path;
                       });
                     },
                   )),
-                  /* ImagePickerWidget(
-                      diameter: 180,
-                      initialImage:
-                          "https://strattonapps.com/wp-content/uploads/2020/02/flutter-logo-5086DD11C5-seeklogo.com_.png",
-                      shape: ImagePickerWidgetShape.circle,
-                      isEditable: true,
-                      shouldCrop: true,
-                      imagePickerOptions: ImagePickerOptions(imageQuality: 65),
-                      onChange: (File file) {
-                        print("I changed the file to: ${file.path}");
-                        imagePath = file.path;
-                      }),*/
+                  
+                  
+
                   const SizedBox(
                     height: 10,
                   ),
@@ -237,4 +240,20 @@ class _ProfileViewState extends AuthRequiredState<ProfileView>
       ),
     );
   }
+}
+
+ Future<Widget> _BuildMenu(String imagepath ) async{
+  return Center(
+                      child: ImagePickerWidget(
+                    diameter: 180,
+                    initialImage: imagepath,
+                    shape: ImagePickerWidgetShape.circle,
+                    isEditable: true,
+                    shouldCrop: true,
+                    imagePickerOptions: ImagePickerOptions(imageQuality: 65),
+                    onChange: (file) {
+                      print("I changed the file to: ${file.path}");
+                     
+                    },
+                  ));
 }
