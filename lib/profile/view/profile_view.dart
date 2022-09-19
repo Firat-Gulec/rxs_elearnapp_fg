@@ -1,12 +1,11 @@
-
-
-
 import 'dart:io';
 
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:image_picker_widget/image_picker_widget.dart';
+import 'package:loading_indicator/loading_indicator.dart';
+import 'package:widget_loading/widget_loading.dart';
 import '../../core/Init/cache/cache_manager.dart';
 import '../../core/Init/lang/locale_keys.g.dart';
 import '../../core/Init/provider/theme_provider.dart';
@@ -28,20 +27,16 @@ class ProfileView extends StatefulWidget {
 
 class _ProfileViewState extends AuthRequiredState<ProfileView>
     with CacheManager {
-    
-    
- 
-
   Future<void> _changeTheme() async {
     setState(() {});
   }
 
   final _usernameController = TextEditingController();
   final _websiteController = TextEditingController();
-  var _loading = false;
-  late String imagePath ='http://upload.art.ifeng.com/2017/0425/1493105660290.jpg';
-late XFile _profileImage;
-
+  var _loading = true;
+  late String imagePath =
+      'http://upload.art.ifeng.com/2017/0425/1493105660290.jpg';
+  late XFile _profileImage;
 
   late File _pickedImage;
   late String _imagepath;
@@ -62,7 +57,7 @@ late XFile _profileImage;
     if (storageData != null) {
       print(storageResponse.data.toString());
       print('object');
-    //  imagePath = storageResponse.data.toString();
+      //  imagePath = storageResponse.data.toString();
     }
 
     final response = await supabase
@@ -82,15 +77,14 @@ late XFile _profileImage;
       _websiteController.text = (data['user_role'] ?? '') as String;
       //imagePath = (data['avatar_url'] ?? '') as String;
     }
-    
-   // setState(()  {
+
+    setState(() {
+      imagePath = storageData.toString();
       _loading = false;
-          imagePath = storageData.toString();
-        print(imagePath);
-        print('atama eğer');
-        //_imageFile = ImagePicker.pickImage(source: imagePath)
-  
-  //  });
+      print(imagePath);
+      print('atama eğer');
+      //_imageFile = ImagePicker.pickImage(source: imagePath)
+    });
   }
 
   /// Called when user taps `Update` button
@@ -100,17 +94,16 @@ late XFile _profileImage;
     });
 //print(imagePath);
 
- final avatarFile = imagePath;
+    final avatarFile = imagePath;
 
     final userName = _usernameController.text;
     final website = _websiteController.text;
     final user = supabase.auth.currentUser;
 
-   /* final responseAvatar = await supabase.storage.from('avatars').upload(
+    /* final responseAvatar = await supabase.storage.from('avatars').upload(
         '${user?.id}/avatar1.png', avatarFile,
         fileOptions: FileOptions(cacheControl: '3600', upsert: false));
 */
-
 
     //print(user);
     final updates = {
@@ -172,26 +165,23 @@ late XFile _profileImage;
               margin: const EdgeInsets.fromLTRB(25, 10, 25, 10),
               padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
               child: Column(
-                children: [ 
+                children: <Widget>[
 
-                  
-                  Center(
-                      child: ImagePickerWidget(
-                    diameter: 180,
-                    initialImage: imagePath,
-                    shape: ImagePickerWidgetShape.circle,
-                    isEditable: true,
-                    shouldCrop: true,
-                    imagePickerOptions: ImagePickerOptions(imageQuality: 65),
-                    onChange: (file) {
-                      print("I changed the file to: ${file.path}");
-                      setState(() {
-                       // imagePath = file.path;
-                      });
-                    },
-                  )),
-                  
-                  
+
+
+                  WiperLoading(
+                    interval: Duration(milliseconds: 750),
+                    loading: _loading,
+                    child: FutureBuilder<Widget>(
+                      future: _BuildM(imagePath),
+                      builder: (context, snapshot) {
+                        return Text("${snapshot.data.toString()}");
+                      },
+                    ),
+                  ),
+
+
+
 
                   const SizedBox(
                     height: 10,
@@ -225,10 +215,11 @@ late XFile _profileImage;
                   ),
                   ElevatedButton(
                       onPressed: _signOut, child: const Text('Sign Out')),
-                       ElevatedButton(
+                  ElevatedButton(
                       onPressed: () {
                         print(imagePath);
-                      }, child: const Text('Change')),
+                      },
+                      child: const Text('Change')),
                   const SizedBox(
                     height: 10,
                   ),
@@ -242,18 +233,17 @@ late XFile _profileImage;
   }
 }
 
- Future<Widget> _BuildMenu(String imagepath ) async{
-  return Center(
-                      child: ImagePickerWidget(
-                    diameter: 180,
-                    initialImage: imagepath,
-                    shape: ImagePickerWidgetShape.circle,
-                    isEditable: true,
-                    shouldCrop: true,
-                    imagePickerOptions: ImagePickerOptions(imageQuality: 65),
-                    onChange: (file) {
-                      print("I changed the file to: ${file.path}");
-                     
-                    },
-                  ));
+_BuildM(String imagepath) async{
+  await Future.delayed(const Duration(seconds: 1));
+  return ImagePickerWidget(
+    diameter: 180,
+    initialImage: imagepath,
+    shape: ImagePickerWidgetShape.circle,
+    isEditable: true,
+    shouldCrop: true,
+    imagePickerOptions: ImagePickerOptions(imageQuality: 65),
+    onChange: (file) {
+      print("I changed the file to: ${file.path}");
+    },
+  );
 }

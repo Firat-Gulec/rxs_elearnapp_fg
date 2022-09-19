@@ -38,6 +38,7 @@ dependencies:
   casbin: ^0.1.0
   image_picker_widget: ^2.2.1
   loading_indicator: ^3.1.0
+  widget_loading: ^0.3.2
   flutter:
     sdk: flutter
 
