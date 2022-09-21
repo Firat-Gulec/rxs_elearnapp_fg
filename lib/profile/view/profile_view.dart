@@ -165,24 +165,26 @@ class _ProfileViewState extends AuthRequiredState<ProfileView>
               margin: const EdgeInsets.fromLTRB(25, 10, 25, 10),
               padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
               child: Column(
-                children: <Widget>[
-
-
-
+                children: [
                   WiperLoading(
                     interval: Duration(milliseconds: 750),
                     loading: _loading,
-                    child: FutureBuilder<Widget>(
-                      future: _BuildM(imagePath),
-                      builder: (context, snapshot) {
-                        return Text("${snapshot.data.toString()}");
+                    child: Center(
+                        child: ImagePickerWidget(
+                      diameter: 180,
+                      initialImage: imagePath,
+                      shape: ImagePickerWidgetShape.circle,
+                      isEditable: true,
+                      shouldCrop: true,
+                      imagePickerOptions: ImagePickerOptions(imageQuality: 65),
+                      onChange: (file) {
+                        print("I changed the file to: ${file.path}");
+                        setState(() {
+                          // imagePath = file.path;
+                        });
                       },
-                    ),
+                    )),
                   ),
-
-
-
-
                   const SizedBox(
                     height: 10,
                   ),
@@ -233,8 +235,7 @@ class _ProfileViewState extends AuthRequiredState<ProfileView>
   }
 }
 
-_BuildM(String imagepath) async{
-  await Future.delayed(const Duration(seconds: 1));
+_BuildM(String imagepath) async {
   return ImagePickerWidget(
     diameter: 180,
     initialImage: imagepath,
