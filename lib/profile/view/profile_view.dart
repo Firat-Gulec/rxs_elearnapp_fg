@@ -35,7 +35,7 @@ class _ProfileViewState extends AuthRequiredState<ProfileView>
   final _websiteController = TextEditingController();
   var _loading = true;
   late String imagePath =
-      'http://upload.art.ifeng.com/2017/0425/1493105660290.jpg';
+      'https://sgulfrkzsmagewgaqqhe.supabase.co/storage/v1/object/public/avatars/avatar1.png';
   late XFile _profileImage;
 
   late File _pickedImage;
