@@ -2,6 +2,7 @@ import 'package:get/get.dart';
 
 import '../../core/Init/navigation/navigation_constants.dart';
 import '../../core/Init/navigation/navigation_service.dart';
+import '../../core/constants.dart';
 
 
 NavigationService navigation = NavigationService.instance;
