@@ -1,12 +1,12 @@
 import 'dart:convert';
 
-import 'package:easy_localization/easy_localization.dart';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:survey_kit/survey_kit.dart';
 
-import '../../core/Init/lang/locale_keys.g.dart';
+
 
 class CustomSurveyView extends StatefulWidget {
   const CustomSurveyView({Key? key}) : super(key: key);
@@ -36,8 +36,8 @@ class _CustomSurveyViewState extends State<CustomSurveyView> {
                   showProgress: true,
                   // ignore: prefer_const_literals_to_create_immutables
                   localizations: {
-                    'cancel': tr(LocaleKeys.questionnaire_cancel),
-                    'next': tr(LocaleKeys.questionnaire_next),
+                    'cancel': "Cancel",
+                    'next': "Next",
                   },
                   themeData: Theme.of(context).copyWith(
                     colorScheme: ColorScheme.fromSwatch(

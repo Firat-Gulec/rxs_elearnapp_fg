@@ -1,11 +1,10 @@
 import 'package:get/get.dart';
 
-import '../../core/Init/navigation/navigation_constants.dart';
-import '../../core/Init/navigation/navigation_service.dart';
 import '../../core/constants.dart';
 
 
-NavigationService navigation = NavigationService.instance;
+
+//NavigationService navigation = NavigationService.instance;
 
 class SurveyController extends GetxController {
   var count = 0.obs;
@@ -27,7 +26,7 @@ class SurveyController extends GetxController {
     // ignore: unrelated_type_equality_checks
     if (count == -1) {
       count = 0.obs;
-      navigation.navigateToPage(path: NavigationConstants.LOGIN);
+      //navigation.navigateToPage(path: NavigationConstants.LOGIN);
     }
   }
 

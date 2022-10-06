@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -7,10 +6,7 @@ import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:survey_kit/survey_kit.dart';
 
-import '../../core/Init/cache/cache_manager.dart';
-import '../../core/Init/lang/locale_keys.g.dart';
-import '../../core/Init/navigation/navigation_constants.dart';
-import '../../core/Init/navigation/navigation_service.dart';
+
 
 class QuestionnaireView extends StatefulWidget {
   const QuestionnaireView({Key? key}) : super(key: key);
@@ -20,8 +16,7 @@ class QuestionnaireView extends StatefulWidget {
 }
 
 class _QuestionnaireViewState extends State<QuestionnaireView>
-    with CacheManager {
-  NavigationService navigation = NavigationService.instance;
+   {
   late String name;
   late String loadString;
 
@@ -49,19 +44,19 @@ class _QuestionnaireViewState extends State<QuestionnaireView>
                   }
                   if (result.finishReason.toString() ==
                       'FinishReason.DISCARDED') {
-                    navigation.navigateToPage(path: NavigationConstants.LOGIN);
+                    //navigation.navigateToPage(path: NavigationConstants.LOGIN);
                   }
                   if (result.finishReason.toString() ==
                       'FinishReason.COMPLETED') {
-                    navigation.navigateToPage(path: NavigationConstants.LOGIN);
+                   // navigation.navigateToPage(path: NavigationConstants.LOGIN);
                   }
                 },
                 task: task,
                 showProgress: true,
                 // ignore: prefer_const_literals_to_create_immutables
                 localizations: {
-                  'cancel': tr(LocaleKeys.questionnaire_cancel),
-                  'next': tr(LocaleKeys.questionnaire_next),
+                  'cancel': "Cancel",
+                  'next': "Next",
                 },
                 themeData: Theme.of(context).copyWith(
                   colorScheme: ColorScheme.fromSwatch(
@@ -174,10 +169,10 @@ class _QuestionnaireViewState extends State<QuestionnaireView>
   }
 
   Future<Task> getJsonTask() async {
-    final prefs = await SharedPreferences.getInstance();
-    name = prefs.getString("name") ?? "null";
-    loadString = prefs.getString("loadstring") ?? "null";
-    final taskJson = await rootBundle.loadString(loadString);
+    //final prefs = await SharedPreferences.getInstance();
+    //name = prefs.getString("name") ?? "null";
+    //loadString = prefs.getString("loadstring") ?? "null";
+    final taskJson = await rootBundle.loadString("assets/questionnaires/login_survey.json");
     final taskMap = json.decode(taskJson);
 
     return Task.fromJson(taskMap);

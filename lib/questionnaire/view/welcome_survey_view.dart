@@ -1,13 +1,10 @@
-import 'package:easy_localization/easy_localization.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
 import 'package:get/get.dart';
 import 'package:group_button/group_button.dart';
 
-
-import '../../core/Init/cache/cache_manager.dart';
-import '../../core/Init/lang/locale_keys.g.dart';
 import '../../core/widget/header_widget.dart';
 import '../../core/widget/padding/custom_padding.dart';
 import '../model/phonenumber_formatter.dart';
@@ -37,7 +34,7 @@ late final List<String> selectedOptions;
 late final String selectedCity;
 
 class _WelcomeSurveyViewState extends State<WelcomeSurveyView>
-    with CacheManager {
+    {
   final List<QuestionModel> _questions = sample_data
       .map(
         (question) => QuestionModel(
@@ -83,7 +80,7 @@ class _WelcomeSurveyViewState extends State<WelcomeSurveyView>
                   _groupboxcontroller.selectedIndexes.clear();
                 });
               },
-              child: Text(tr(LocaleKeys.questionnaire_next)),
+              child: Text("tr(LocaleKeys.questionnaire_next)"),
               style: ElevatedButton.styleFrom(
                 elevation: 0.0,
                 primary: Colors.transparent.withOpacity(0),
@@ -96,7 +93,7 @@ class _WelcomeSurveyViewState extends State<WelcomeSurveyView>
         ],
         backgroundColor: Colors.transparent,
         elevation: 0.2,
-        title: Text(tr(LocaleKeys.questionnaire_questionnaire)),
+        title: Text("tr(LocaleKeys.questionnaire_questionnaire)"),
         centerTitle: true,
         flexibleSpace: Container(
           decoration: BoxDecoration(
@@ -153,7 +150,7 @@ class _WelcomeSurveyViewState extends State<WelcomeSurveyView>
                         textFieldConfiguration: TextFieldConfiguration(
                             controller: _typeAheadController,
                             decoration: InputDecoration(
-                                labelText: tr(LocaleKeys.questionnaire_city),
+                                labelText: "tr(LocaleKeys.questionnaire_city)",
                                 hoverColor: Colors.white,
                                 border: OutlineInputBorder(
                                     borderRadius: BorderRadius.circular(20)),
@@ -182,7 +179,7 @@ class _WelcomeSurveyViewState extends State<WelcomeSurveyView>
                         controller: _phoneNumberController,
                         keyboardType: TextInputType.phone,
                         decoration: InputDecoration(
-                            labelText: tr(LocaleKeys.questionnaire_phone),
+                            labelText:" tr(LocaleKeys.questionnaire_phone)",
                             hoverColor: Colors.white,
                             border: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(20)),

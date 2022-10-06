@@ -1,0 +1,93 @@
+{
+    "id": "123",
+    "type": "navigable",
+    "rules": [
+        {
+            "type": "conditional",
+            "triggerStepIdentifier": {
+                "id": "4"
+            },
+            "values": {
+                "Yes": "2",
+                "No": "10"
+            }
+        },
+        {
+            "type": "direct",
+            "triggerStepIdentifier": {
+                "id": "1"
+            },
+            "destinationStepIdentifier": {
+                "id": "2"
+            }
+        },
+        {
+            "type": "direct",
+            "triggerStepIdentifier": {
+                "id": "4"
+            },
+            "destinationStepIdentifier": {
+                "id": "10"
+            }
+        }
+    ],
+    "steps": [
+        {
+            "stepIdentifier": {
+                "id": "1"
+            },
+            "type": "intro",
+            "title": "Welcome to the Happy\n Pet App first login survey",
+            "text": "Get ready for a bunch of super random questions!",
+            "buttonText": "Let's go!"
+        },
+        {
+            "stepIdentifier": {
+                "id": "2"
+            },
+            "type": "question",
+            "title": "Your Location",
+            "text": "Where do you live?",
+            "answerFormat": {
+                "type": "text",
+                "maxLines": 5,
+                "validationRegEx": "^(?!\\s*\\$).+"
+            }
+        },
+        {
+            "stepIdentifier": {
+                "id": "6"
+            },
+            "type": "question",
+            "title": "Your Location",
+            "text": "Where do you live?",
+            "answerFormat": {
+                "type": "text",
+                "maxLines": 5,
+                "validationRegEx": "^(?!\\s*\\$).+"
+            }
+        },
+        {
+            "stepIdentifier": {
+                "id": "3"
+            },
+            "type": "question",
+            "title": "Do you have a pet?",
+            "answerFormat": {
+                "type": "bool",
+                "positiveAnswer": "Yes",
+                "negativeAnswer": "No",
+                "result": "POSITIVE"
+            }
+        },    
+        {
+            "stepIdentifier": {
+                "id": "10"
+            },
+            "type": "completion",
+            "text": "Thanks for taking the survey, we will contact you soon!",
+            "title": "Done!",
+            "buttonText": "Submit survey"
+        }
+    ]
+}
